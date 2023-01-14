@@ -61,12 +61,20 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/history_detail_pic_iv"
+            <LinearLayout
+                android:id="@+id/history_detail_pic_ll"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
-                android:layout_margin="10dp"
-                android:scaleType="fitXY" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/history_detail_pic_iv"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="280dp"-->
+            <!--                android:layout_margin="10dp"-->
+            <!--                android:scaleType="fitXY" />-->
 
             <TextView
                 android:id="@+id/history_detail_content_tv"

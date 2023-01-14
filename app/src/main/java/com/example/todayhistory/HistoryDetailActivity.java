@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.todayhistory.bean.HistoryDetailBean;
@@ -20,7 +21,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
     private ImageView mBackIv;
     private ImageView mShareIv;
     private TextView mTitleTv;
-    private ImageView mPicIv;
+    private LinearLayout mPicLl;
     private TextView mContentTv;
 
     private HistoryDetailBean.ResultBean resultBean;
@@ -33,7 +34,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
         mBackIv = findViewById(R.id.history_detail_back_iv);
         mShareIv = findViewById(R.id.history_detail_share_iv);
         mTitleTv = findViewById(R.id.history_detail_title_tv);
-        mPicIv = findViewById(R.id.history_detail_pic_iv);
+        mPicLl = findViewById(R.id.history_detail_pic_ll);
         mContentTv = findViewById(R.id.history_detail_content_tv);
 
         mBackIv.setOnClickListener(this);
@@ -50,14 +51,24 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
         HistoryDetailBean historyDetailBean = new Gson().fromJson(result, HistoryDetailBean.class);
         resultBean = historyDetailBean.getResult().get(0);
         mTitleTv.setText(resultBean.getTitle());
+
         Integer picNo = Integer.valueOf(resultBean.getPicNo());
-        String picUrl = resultBean.getPicUrl().get(0).getUrl();
+        Log.i(TAG, "onSuccess: " + picNo);
         if (picNo > 0) {
-            mPicIv.setVisibility(View.VISIBLE);
-            Picasso.with(this).load(picUrl).into(mPicIv);
-        } else {
-            mPicIv.setVisibility(View.GONE);
+            mPicLl.removeAllViews();
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 280);
+            params.setMargins(10, 10, 10, 10);
+            for (int i = 0; i < picNo; i++) {
+                String picUrl = resultBean.getPicUrl().get(i).getUrl();
+                Log.i(TAG, "onSuccess: " + picNo + " " + picUrl);
+                ImageView imageView = new ImageView(this);
+                imageView.setLayoutParams(params);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                Picasso.with(this).load(picUrl).into(imageView);
+                mPicLl.addView(imageView);
+            }
         }
+
         mContentTv.setText(resultBean.getContent());
     }
 

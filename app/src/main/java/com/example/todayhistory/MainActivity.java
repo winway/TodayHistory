@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, HistoryDetailActivity.class);
-                intent.putExtra("history_id", mData.get(i).getE_id());
+                intent.putExtra("history_id", mData.get(i-1).getE_id());
                 startActivity(intent);
             }
         });
