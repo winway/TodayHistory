@@ -58,6 +58,7 @@ public class HistoryBean implements Serializable {
         private String date;
         private String title;
         private String e_id;
+        private String first_url;
 
         public String getDay() {
             return day;
@@ -89,6 +90,14 @@ public class HistoryBean implements Serializable {
 
         public void setE_id(String e_id) {
             this.e_id = e_id;
+        }
+
+        public String getFirst_url() {
+            return first_url;
+        }
+
+        public void setFirst_url(String first_url) {
+            this.first_url = first_url;
         }
     }
 }

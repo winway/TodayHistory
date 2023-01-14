@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.todayhistory.adapter.TimelineListAdapter;
 import com.example.todayhistory.bean.HistoryBean;
+import com.example.todayhistory.bean.HistoryDetailBean;
 import com.example.todayhistory.bean.LaoHuangLiBean;
 import com.example.todayhistory.common.BaseActivity;
 import com.example.todayhistory.common.URLHelper;
@@ -80,7 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(MainActivity.this, HistoryDetailActivity.class);
-                intent.putExtra("history_id", mData.get(i-1).getE_id());
+                intent.putExtra("history_id", mData.get(i - 1).getE_id());
                 startActivity(intent);
             }
         });
@@ -182,9 +183,55 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         List<HistoryBean.ResultBean> resultBeanList = mHistoryBean.getResult();
         for (int i = 0; i < 5; i++) {
-            mData.add(resultBeanList.get(i));
+            HistoryBean.ResultBean resultBean = resultBeanList.get(i);
+            setHistoryPic(resultBean);
+            mData.add(resultBean);
         }
-        mAdapter.notifyDataSetChanged();
+    }
+
+    private void setHistoryPic(HistoryBean.ResultBean historyResultBean) {
+        String url = URLHelper.getHistoryDetailURL(historyResultBean.getE_id());
+        Log.i(TAG, "getHistoryPic: " + url);
+
+        RequestParams params = new RequestParams(url);
+        x.http().get(params, new CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                HistoryDetailBean historyDetailBean = new Gson().fromJson(result, HistoryDetailBean.class);
+                if (historyDetailBean.getError_code() != 0) {
+                    Log.e(TAG, "onSuccess: " + historyDetailBean.getReason());
+                    return;
+                }
+
+                HistoryDetailBean.ResultBean resultBean = historyDetailBean.getResult().get(0);
+                Integer picNo = Integer.valueOf(resultBean.getPicNo());
+                Log.i(TAG, "onSuccess: " + picNo);
+                if (picNo > 0) {
+                    Log.i(TAG, "onSuccess: " + picNo + " " + resultBean.getPicUrl().get(0).getUrl());
+                    historyResultBean.setFirst_url(resultBean.getPicUrl().get(0).getUrl());
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                try {
+                    throw ex;
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override

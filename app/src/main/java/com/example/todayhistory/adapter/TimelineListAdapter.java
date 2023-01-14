@@ -2,6 +2,7 @@ package com.example.todayhistory.adapter;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.todayhistory.R;
 import com.example.todayhistory.bean.HistoryBean;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -68,7 +70,12 @@ public class TimelineListAdapter extends BaseAdapter {
         }
 
         holder.mTitleTextView.setText(currentItem.getTitle());
-        holder.mPicImageView.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(currentItem.getFirst_url())) {
+            holder.mPicImageView.setVisibility(View.GONE);
+        } else {
+            holder.mPicImageView.setVisibility(View.VISIBLE);
+            Picasso.with(mContext).load(currentItem.getFirst_url()).into(holder.mPicImageView);
+        }
 
         return view;
     }

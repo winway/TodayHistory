@@ -63,7 +63,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
                 Log.i(TAG, "onSuccess: " + picNo + " " + picUrl);
                 ImageView imageView = new ImageView(this);
                 imageView.setLayoutParams(params);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 Picasso.with(this).load(picUrl).into(imageView);
                 mPicLl.addView(imageView);
             }
